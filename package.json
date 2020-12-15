@@ -1,0 +1,28 @@
+{
+  "name": "ttc2ttf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build:live",
+    "build": "tsc -p .",
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts /Users/shindonghun/Desktop/HelveticaNeue.ttc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oysterlab/ttc2ttf.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oysterlab/ttc2ttf/issues"
+  },
+  "homepage": "https://github.com/oysterlab/ttc2ttf#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.14",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}
