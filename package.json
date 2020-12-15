@@ -1,20 +1,31 @@
 {
   "name": "ttc2ttf",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.6",
+  "description": "Use for split ttc file into ttf files.",
+  "main": "dist/index.js",
+  "bin": {
+    "ttc2ttf": "./dist/index.js"
+  },
+  "preferGlobal": true,
   "scripts": {
     "start": "npm run build:live",
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts /Users/shindonghun/Desktop/HelveticaNeue.ttc"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oysterlab/ttc2ttf.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["ttf", "ttc", "ttc2ttf", "font", "convert"],
+  "author": { "name": "oysterlaboratory", "email": "oysterlaboratory@gmail.com" },
+  "contributors": [
+  ],  
+  "engines": { "node": ">= 0.4.0" },
+  "licenses": [ {
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/MIT" 
+  } ],
   "bugs": {
     "url": "https://github.com/oysterlab/ttc2ttf/issues"
   },
@@ -24,5 +35,6 @@
     "nodemon": "^2.0.6",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
-  }
+  },
+  "dependencies": {}
 }
