@@ -4,7 +4,7 @@
   "description": "Use for split ttc file into ttf files.",
   "main": "dist/index.js",
   "bin": {
-    "ttc2ttf": "./dist/index.js"
+    "ttc2ttf": "node ./dist/index.js"
   },
   "preferGlobal": true,
   "scripts": {
