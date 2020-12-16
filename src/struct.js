@@ -30,7 +30,8 @@ export default function struct(format) {
     while ((m = refmt.exec(format))) { ((r, s, f) => {
         for (let i = 0; i < r; ++i, size += s) { 
             if (f) {
-                fns.push(f(size))}
+                fns.push(f(size))
+            }
         }
     })(...lu(...m.slice(1)))}
     const unpack_from = (arrb, offs) => {

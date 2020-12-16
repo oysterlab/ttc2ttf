@@ -55,23 +55,29 @@ export default function ttc2ttf(ttcPath:string, distPath:string) {
 			if (fs.existsSync(ttfPath)) return
 
 			for (let j = 0; j < tableCount; j++) {
-				const offset = struct('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x08 + j * 0x10)[0]
-				const length = struct('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x0C + j * 0x10)[0]
+				const offset:number = struct('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x08 + j * 0x10)[0]
+				const length:number = struct('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x0C + j * 0x10)[0]
 				struct('I').pack_into(newBuf, 0x0C + 0x08 + j * 0x10, currentOffset)
 
-                if (offset < length) {
-                    // Todo: this will be checked...
-                    // console.log('tableCount: ' + j + ' ' + offset + ' ' + length)
-                    continue
-                }
+				const CHUCK_LENGTH:number = 1024 * 1024
+				const lastLength = length % CHUCK_LENGTH
+				
+				let steps = parseInt((length / CHUCK_LENGTH).toString())
 
-                const currentTable = struct(length + 'b').unpack_from(buf, offset)
-				struct(length + 'b').pack_into_with_array(newBuf, currentOffset, currentTable)
-				currentOffset += ceil4(length)
+				if (lastLength > 0) steps++
+				
+				Array.from(Array(steps)).forEach((_, i:number) => {
+					const chuckOffset = offset + i * CHUCK_LENGTH
+					const chunckLength = (steps != i + 1) ? CHUCK_LENGTH : lastLength
+					
+					const currentTable = struct(chunckLength + 'b').unpack_from(buf, chuckOffset)
+					struct(chunckLength + 'b').pack_into_with_array(newBuf, currentOffset, currentTable)
+					currentOffset += ceil4(chunckLength)
+				})
 			}
 			
 			console.log(ttfPath + ' is extracted')
-			fs.writeFileSync(ttfPath, Buffer.from(newBuf))  
+			fs.writeFileSync(ttfPath, Buffer.from(newBuf))
 		})
 	} else {
 		console.log(ttcPath + 'has not format of ttc...')

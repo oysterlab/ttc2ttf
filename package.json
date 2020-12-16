@@ -10,7 +10,7 @@
   "scripts": {
     "start": "npm run build:live",
     "build": "tsc -p .",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/bin/ttc2ttf.js"
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/bin/ttc2ttf.js '/Users/shindonghun/Desktop/ヒラギノ丸ゴ ProN W4.ttc'"
   },
 
   "repository": {

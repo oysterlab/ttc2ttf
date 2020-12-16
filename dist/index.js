@@ -67,18 +67,25 @@ function ttc2ttf(ttcPath, distPath) {
             var ttfPath = path_1.default.join(distPath, ttfName);
             if (fs_1.default.existsSync(ttfPath))
                 return;
-            for (var j = 0; j < tableCount; j++) {
+            var _loop_1 = function (j) {
                 var offset = struct_1.default('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x08 + j * 0x10)[0];
                 var length = struct_1.default('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x0C + j * 0x10)[0];
                 struct_1.default('I').pack_into(newBuf, 0x0C + 0x08 + j * 0x10, currentOffset);
-                if (offset < length) {
-                    // Todo: this will be checked...
-                    // console.log('tableCount: ' + j + ' ' + offset + ' ' + length)
-                    continue;
-                }
-                var currentTable = struct_1.default(length + 'b').unpack_from(buf, offset);
-                struct_1.default(length + 'b').pack_into_with_array(newBuf, currentOffset, currentTable);
-                currentOffset += ceil4(length);
+                var CHUCK_LENGTH = 1024 * 1024;
+                var lastLength = length % CHUCK_LENGTH;
+                var steps = parseInt((length / CHUCK_LENGTH).toString());
+                if (lastLength > 0)
+                    steps++;
+                Array.from(Array(steps)).forEach(function (_, i) {
+                    var chuckOffset = offset + i * CHUCK_LENGTH;
+                    var chunckLength = (steps != i + 1) ? CHUCK_LENGTH : lastLength;
+                    var currentTable = struct_1.default(chunckLength + 'b').unpack_from(buf, chuckOffset);
+                    struct_1.default(chunckLength + 'b').pack_into_with_array(newBuf, currentOffset, currentTable);
+                    currentOffset += ceil4(chunckLength);
+                });
+            };
+            for (var j = 0; j < tableCount; j++) {
+                _loop_1(j);
             }
             console.log(ttfPath + ' is extracted');
             fs_1.default.writeFileSync(ttfPath, Buffer.from(newBuf));
