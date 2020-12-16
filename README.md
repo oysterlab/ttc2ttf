@@ -10,5 +10,5 @@ npm i -g ttc2ttf
 ## Usage
 Once installed you could run it doing
 ```
-ttc2ttf <ttc path> [dist path]
+ttc2ttf <ttc file path> [dist path]
 ```
