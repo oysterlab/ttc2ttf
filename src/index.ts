@@ -31,7 +31,6 @@ export default function ttc2ttf(ttcPath:string, distPath:string) {
 		const ttfCount = struct('I').unpack_from(buf, 0x08)[0]
 	
 		Array.from(new Array(ttfCount)).forEach((_, i) => {
-			
 
 			const tableHeaderOffset = struct('I').unpack_from(buf, 0x0C + 0x04 * i)[0]
 			const tableCount = struct('H').unpack_from(buf, tableHeaderOffset + 0x04)[0]
@@ -63,11 +62,9 @@ export default function ttc2ttf(ttcPath:string, distPath:string) {
 				currentOffset += ceil4(length)
 			}
 			
-			console.log(ttfPath + ' is extracted\n')
-
+			console.log(ttfPath + ' is extracted')
 			fs.writeFileSync(ttfPath, Buffer.from(newBuf))  
 		})
-		console.log('done')
 	} else {
 		console.log(ttcPath + 'has not format of ttc...')
 	}
