@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const ttc2ttf = require('../index');
+import ttc2ttf from '../'
 
 if (process.argv[2] != null) {
 	const fontPath = process.argv[2]
