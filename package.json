@@ -1,6 +1,6 @@
 {
   "name": "ttc2ttf",
-  "version": "1.0.94",
+  "version": "1.0.95",
   "description": "Use for split ttc file into ttf files.",
   "main": "dist/index.js",
   "bin": {
