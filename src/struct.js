@@ -28,7 +28,10 @@ export default function struct(format) {
     if (!m) { throw new RangeError("Invalid format string") }
     const t = lut('<' === m[1]), lu = (n, c) => t[c](n ? parseInt(n, 10) : 1)
     while ((m = refmt.exec(format))) { ((r, s, f) => {
-        for (let i = 0; i < r; ++i, size += s) { if (f) {fns.push(f(size))} }
+        for (let i = 0; i < r; ++i, size += s) { 
+            if (f) {
+                fns.push(f(size))}
+        }
     })(...lu(...m.slice(1)))}
     const unpack_from = (arrb, offs) => {
         if (arrb.byteLength < (offs|0) + size) { throw errbuf }

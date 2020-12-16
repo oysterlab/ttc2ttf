@@ -58,7 +58,14 @@ export default function ttc2ttf(ttcPath:string, distPath:string) {
 				const offset = struct('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x08 + j * 0x10)[0]
 				const length = struct('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x0C + j * 0x10)[0]
 				struct('I').pack_into(newBuf, 0x0C + 0x08 + j * 0x10, currentOffset)
-				const currentTable = struct(length + 'b').unpack_from(buf, offset)
+
+                if (offset < length) {
+                    // Todo: this will be checked...
+                    // console.log('tableCount: ' + j + ' ' + offset + ' ' + length)
+                    continue
+                }
+
+                const currentTable = struct(length + 'b').unpack_from(buf, offset)
 				struct(length + 'b').pack_into_with_array(newBuf, currentOffset, currentTable)
 				currentOffset += ceil4(length)
 			}

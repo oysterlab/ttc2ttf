@@ -1,4 +1,24 @@
 "use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -29,6 +49,7 @@ function ttc2ttf(ttcPath, distPath) {
     if (type == 'ttcf') {
         var ttfCount = struct_1.default('I').unpack_from(buf, 0x08)[0];
         Array.from(new Array(ttfCount)).forEach(function (_, i) {
+            var _a;
             var tableHeaderOffset = struct_1.default('I').unpack_from(buf, 0x0C + 0x04 * i)[0];
             var tableCount = struct_1.default('H').unpack_from(buf, tableHeaderOffset + 0x04)[0];
             var headerLength = 0x0C + tableCount * 0x10;
@@ -39,8 +60,8 @@ function ttc2ttf(ttcPath, distPath) {
             }
             var totalLength = headerLength + tableLength;
             var newBuf = byteArray(totalLength);
-            var header = struct_1.default(headerLength + 's').unpack_from(buf, tableHeaderOffset);
-            struct_1.default(headerLength + "c").pack_into_with_array(newBuf, 0, header);
+            var header = struct_1.default(headerLength + 'b').unpack_from(buf, tableHeaderOffset);
+            (_a = struct_1.default(headerLength + "b")).pack_into.apply(_a, __spread([newBuf, 0], header));
             var currentOffset = headerLength;
             var ttfName = fileHeadName + "_" + i + ".ttf";
             var ttfPath = path_1.default.join(distPath, ttfName);
@@ -50,6 +71,11 @@ function ttc2ttf(ttcPath, distPath) {
                 var offset = struct_1.default('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x08 + j * 0x10)[0];
                 var length = struct_1.default('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x0C + j * 0x10)[0];
                 struct_1.default('I').pack_into(newBuf, 0x0C + 0x08 + j * 0x10, currentOffset);
+                if (offset < length) {
+                    // Todo: this will be checked...
+                    // console.log('tableCount: ' + j + ' ' + offset + ' ' + length)
+                    continue;
+                }
                 var currentTable = struct_1.default(length + 'b').unpack_from(buf, offset);
                 struct_1.default(length + 'b').pack_into_with_array(newBuf, currentOffset, currentTable);
                 currentOffset += ceil4(length);
