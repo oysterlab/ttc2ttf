@@ -2,16 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import struct from './struct'
 
-if (process.argv[2] != null) {
-	const fontPath = process.argv[2]
-	const distPath = (process.argv[3] != null) ? process.argv[3] : './'
-	ttc2ttf(fontPath, distPath)
-} else {
-	const help = "Command:\n" +
-	" ttc2ttf <ttc path> [dist path]\n"
-	console.log(help)
-}
-
 function toArrayBuffer(buf:Buffer) { 
 	const ab = new ArrayBuffer(buf.length)
 	const view = new Uint8Array(ab)
@@ -32,7 +22,7 @@ function ceil4(n:number) {
 }
 
 
-function ttc2ttf(ttcPath:string, distPath:string) {
+export default function ttc2ttf(ttcPath:string, distPath:string) {
 	const buf = toArrayBuffer(fs.readFileSync(ttcPath))
 	const type = struct('4c').unpack_from(buf, 0).join('')
 	const fileHeadName = path.basename(ttcPath, path.extname(ttcPath))
