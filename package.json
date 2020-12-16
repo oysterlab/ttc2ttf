@@ -10,7 +10,7 @@
   "scripts": {
     "start": "npm run build:live",
     "build": "tsc -p .",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts /Users/shindonghun/Desktop/HelveticaNeue.ttc"
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/bin/ttc2ttf.js /Users/shindonghun/Desktop/HelveticaNeue.ttc"
   },
 
   "repository": {

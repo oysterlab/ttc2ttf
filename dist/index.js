@@ -40,6 +40,7 @@ function ttc2ttf(ttcPath, distPath) {
             var totalLength = headerLength + tableLength;
             var newBuf = byteArray(totalLength);
             var header = struct_1.default(headerLength + 's').unpack_from(buf, tableHeaderOffset);
+            struct_1.default(headerLength + "c").pack_into_with_array(newBuf, 0, header);
             var currentOffset = headerLength;
             var ttfName = fileHeadName + "_" + i + ".ttf";
             var ttfPath = path_1.default.join(distPath, ttfName);
@@ -49,14 +50,13 @@ function ttc2ttf(ttcPath, distPath) {
                 var offset = struct_1.default('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x08 + j * 0x10)[0];
                 var length = struct_1.default('I').unpack_from(buf, tableHeaderOffset + 0x0C + 0x0C + j * 0x10)[0];
                 struct_1.default('I').pack_into(newBuf, 0x0C + 0x08 + j * 0x10, currentOffset);
-                var currentTable = struct_1.default(length + 'c').unpack_from(buf, offset);
-                struct_1.default(length + 'c').pack_into_with_array(newBuf, currentOffset, currentTable);
+                var currentTable = struct_1.default(length + 'b').unpack_from(buf, offset);
+                struct_1.default(length + 'b').pack_into_with_array(newBuf, currentOffset, currentTable);
                 currentOffset += ceil4(length);
             }
-            console.log(ttfPath + ' is extracted\n');
+            console.log(ttfPath + ' is extracted');
             fs_1.default.writeFileSync(ttfPath, Buffer.from(newBuf));
         });
-        console.log('done');
     }
     else {
         console.log(ttcPath + 'has not format of ttc...');
